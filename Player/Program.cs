@@ -28,7 +28,8 @@ namespace Player
             player.VolumeChange(400);
             Console.WriteLine(player.Volume);
 
-
+            player.VolumeChange(500);
+            Console.WriteLine(player.Volume);
             player.Stop();
 
             Console.ReadLine();

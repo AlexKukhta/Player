@@ -12,6 +12,8 @@ namespace Player
         const int MIN_VALUE = 0;
         const int MAX_VALUE = 100;
         bool Locked;
+
+        private bool Playing;
         public int Volume
         {
             get
@@ -49,6 +51,7 @@ namespace Player
         public void VolumeChange(int step)
         {
             Volume += step;
+           
         }
 
         public void Play()
@@ -69,6 +72,15 @@ namespace Player
         public void Unlock()
         {
             return Locked = false;
+        }
+
+
+        public bool Stop()
+        {
+            if (Locked=false)
+            {
+
+            }
         }
     }
 }
