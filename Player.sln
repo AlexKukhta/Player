@@ -1,25 +1,20 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.136
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Player", "Player\Player.csproj", "{04DD942B-FD07-46A7-84D2-1EF854F527B6}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Player", "Player\Player.csproj", "{E1295554-9F0E-4928-9665-03818FAF1EE3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{04DD942B-FD07-46A7-84D2-1EF854F527B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{04DD942B-FD07-46A7-84D2-1EF854F527B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{04DD942B-FD07-46A7-84D2-1EF854F527B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{04DD942B-FD07-46A7-84D2-1EF854F527B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1295554-9F0E-4928-9665-03818FAF1EE3}.Debug|x86.ActiveCfg = Debug|x86
+		{E1295554-9F0E-4928-9665-03818FAF1EE3}.Debug|x86.Build.0 = Debug|x86
+		{E1295554-9F0E-4928-9665-03818FAF1EE3}.Release|x86.ActiveCfg = Release|x86
+		{E1295554-9F0E-4928-9665-03818FAF1EE3}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {CA155D4B-A142-4AEE-BB11-511D92F99928}
 	EndGlobalSection
 EndGlobal
