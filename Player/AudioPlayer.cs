@@ -11,7 +11,8 @@ namespace Player
         private int _volume;
         const int MIN_VALUE = 0;
         const int MAX_VALUE = 100;
-        bool Locked;
+        private bool _locked;
+        private bool _playing;
 
         private bool Playing;
         public int Volume
@@ -36,51 +37,63 @@ namespace Player
                 }
             }
         }
-        public Song[] Songs;
+        public Song[] Songs { get; private set; }
 
         public void VolumeUp()
         {
-            Volume++;
+            if (_locked==false)
+                Volume++;
         }
 
         public void VolumeDown()
         {
-            Volume--;
+            if (_locked==false)
+                Volume--;
         }
 
         public void VolumeChange(int step)
         {
+            if (_locked==false)
             Volume += step;
            
         }
 
         public void Play()
         {
-            Console.WriteLine("Player playing: {Songs[0].Name}");
+            if (_locked) return;
+            _playing = true;
+            for (int i = 0; i < length; i++)
+            {
+                Console.WriteLine("Player playing: {Songs[i].Name}");
+                System.Threading.Thread.Sleep(1000);
+            }
+            
         }
 
         public void Stop()
         {
+            if (_locked) return;
+            _playing = false;
             Console.WriteLine("Player is Stopped");
         }
 
         public void Lock()
         {
-            return Locked = true;
+            _locked = true;
         }
        
         public void Unlock()
         {
-            return Locked = false;
+            
+            _locked = false;
         }
 
-
-        public bool Stop()
+        public void Add(Song[] songs)
         {
-            if (Locked=false)
-            {
-
-            }
+            songs = songsArray;
         }
+
+
+        
     }
 }

@@ -10,9 +10,12 @@ namespace Player
         static void Main(string[] args)
         {
             var player = new Player();
-           // player.Volume = 20;
+            // player.Volume = 20;
 
-            player.Songs = GetSongsData();
+            int totalDuration = 0;
+            
+            player.Songs = GetSongsData(ref totalDuration,out int minDuration, out int maxDuration );
+            Console.WriteLine($"Total: {totalDuration}, Min: {minDuration}, MAX {maxDuration}");
 
             //TraceInfo(player)
 
@@ -32,11 +35,25 @@ namespace Player
             Console.WriteLine(player.Volume);
             player.Stop();
 
+
+            var song1= CreateSong();
+
+            player.Songs = new Songs[] { song1 };
+
+            //var song2 = CreateNamedSongs("AcDc", 100);
+
+            var song3 = CreateSong("Acdc", 200);
+
+            player.Songs = new Songs[] { song1, song3 };
+            player.Play();
             Console.ReadLine();
         }
 
-        public static Songs[] GetSongsData()
+        public static Songs[] GetSongsData(ref int totalDuration, out int minDuration, out int maxDuration)
         {
+            minDuration = 1000;
+            maxDuration = 0;
+
             var artist = new Artist();
             artist.Genre = "rock";
             artist.Name = "Bi2";
@@ -55,15 +72,31 @@ namespace Player
             album.name = "Rock";
             album.year = 2000;
 
-            var songs = new Songs()
+            var songs = new Songs[10];
+            var random = new Random();
+            
+            for (int i = 0; i < 10; i++)
             {
-                duration = 10,
-                name = "Lajki",
-                Album = album,
-                Artist = artist
-            };
+                var Songs = new Songs()
+                {
 
-            return new Songs[] { songs };
+                    duration = random.Next(1000),
+                    name = $"Lajki{i}",
+                    Album = album,
+                    Artist = artist
+                };
+                songs[i] = Songs;
+
+                totalDuration += Songs.duration;
+
+                if (Songs.duration<minDuration)
+                {
+                    minDuration = Songs.duration;
+                }
+                maxDuration = Math.Max(maxDuration, Songs.duration);
+            }
+
+            return songs;
         }
 
         public static void TraceInfo(Player player)
@@ -73,5 +106,23 @@ namespace Player
             Console.WriteLine(player.Songs.Length);
             Console.WriteLine(player.Volume);
         }
+
+        public static Songs CreateSong()
+        {
+            return new Songs { name = "Uknown", duration=120};
+        }
+
+
+        //public static Songs CreateSong(Name=name, duration=100)
+        //{
+        //  return CreateSong(name, 120);
+        //}
+
+        public static Songs CreateSong(string name, int duration)
+        {
+            return new Songs { name = name, duration = duration };
+        }
+
+
     }
 }
