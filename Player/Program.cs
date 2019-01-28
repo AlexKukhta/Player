@@ -28,9 +28,7 @@ namespace Player
 
             player.VolumeChange(500);
             Console.WriteLine(player.Volume);
-            player.Stop();
-
-
+            player.Stop()
             var songs = GenerateSongs();
 
             GenerateLikes(songs);
