@@ -7,25 +7,13 @@ namespace Player
 {
     class Artist
     {
-        public string Genre;
-        public string Name;
+        public Genre Genre { get; }
+        public string Name { get; }
 
-        public Artist()
+        public Artist(string name, Genre genre)
         {
-            this.Name = "Default name";
-            this.Genre = "Default genre";
-        }
-
-        public Artist(string Genre)
-        {
-            this.Name = "Default name";
-            this.Genre = Genre;
-        }
-
-        public Artist(string Name, string Genre)
-        {
-            this.Name = Name;
-            this.Genre = Genre;
+            this.Name = name;
+            this.Genre = genre;
         }
     }
 }

@@ -7,9 +7,9 @@ namespace Player
 {
     class Album
     {
-        //public byte[] Thumbnale;
-        public string name;
-        public int year;
+        public byte[] Thumbnale { get; }
+        public string Name { get; }
+        public int Year { get; }
 
     }
 }

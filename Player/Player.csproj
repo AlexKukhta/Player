@@ -60,10 +60,18 @@
   <ItemGroup>
     <Compile Include="Album.cs" />
     <Compile Include="Artist.cs" />
+    <Compile Include="ClassicSkin.cs" />
+    <Compile Include="ColorSkin.cs" />
+    <Compile Include="Genre.cs" />
+    <Compile Include="LikeEnum%27.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomColorSkin.cs" />
+    <Compile Include="Skin.cs" />
     <Compile Include="Songs.cs" />
+    <Compile Include="SongsExtension.cs" />
+    <Compile Include="StringExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

@@ -2,98 +2,125 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Player
+namespace NewPlayer
 {
-    public class AudioPlayer
+    class Program
     {
-        private int _volume;
-        const int MIN_VALUE = 0;
-        const int MAX_VALUE = 100;
-        private bool _locked;
-        private bool _playing;
-
-        private bool Playing;
-        public int Volume
+        static void Main(string[] args)
         {
-            get
+            var player = new Player();
+            // player.Volume = 20;
+
+            int totalDuration = 0;
+
+            player.Songs = GetSongsData(ref totalDuration, out int minDuration, out int maxDuration);
+            Console.WriteLine($"Total: {totalDuration}, Min: {minDuration}, MAX {maxDuration}");
+
+            //TraceInfo(player)
+
+            player.Play();
+            player.VolumeUp();
+            Console.WriteLine(player.Volume);
+
+
+            player.VolumeChange(-20);
+            Console.WriteLine(player.Volume);
+            Console.WriteLine(new string('-', 20));
+
+            player.VolumeChange(400);
+            Console.WriteLine(player.Volume);
+
+            player.VolumeChange(500);
+            Console.WriteLine(player.Volume);
+            player.Stop();
+
+
+            var song1 = CreateSong();
+
+            player.Songs = new Song[] { song1 };
+
+            var song2 = CreateNamedSong("AcDc");
+
+            var song3 = CreateSong("Acdc", 200);
+
+            player.Songs = new Song[] { song1, song2, song3 };
+            player.Play();
+            Console.ReadLine();
+        }
+
+        public static Song[] GetSongsData(ref int totalDuration, out int minDuration, out int maxDuration)
+        {
+            minDuration = 1000;
+            maxDuration = 0;
+
+            var artist = new Artist();
+            artist.Genre = "rock";
+            artist.Name = "Bi2";
+            Console.WriteLine(artist.Genre);
+            Console.WriteLine(artist.Name);
+
+            var artist2 = new Artist("metall");
+            Console.WriteLine(artist2.Genre);
+            Console.WriteLine(artist2.Name);
+
+            var artist3 = new Artist("AcDc", "rock-n-roll");
+            Console.WriteLine(artist3.Name);
+            Console.WriteLine(artist3.Genre);
+
+            var album = new Album();
+            album.Name = "Rock";
+            album.Year = 2000;
+
+            var songs = new Song[10];
+            var random = new Random();
+
+            for (int i = 0; i < 10; i++)
             {
-                return _volume;
-            }
-            private set
-            {
-                if (value < MIN_VALUE)
+                var Songs = new Song()
                 {
-                    _volume = MIN_VALUE;
-                }
-                else if (value > MAX_VALUE)
+
+                    Duration = random.Next(1000),
+                    name = $"Lajki{i}",
+                    Album = album,
+                    Artist = artist
+                };
+                songs[i] = Songs;
+
+                totalDuration += Songs.Duration;
+
+                if (Songs.Duration < minDuration)
                 {
-                    _volume = MAX_VALUE;
+                    minDuration = Songs.Duration;
                 }
-                else
-                {
-                    _volume = value;
-                }
+                maxDuration = Math.Max(maxDuration, Songs.Duration);
             }
-        }
-        public Song[] Songs { get; private set; }
 
-        public void VolumeUp()
+            return songs;
+        }
+
+        public static void TraceInfo(Player player)
         {
-            if (_locked==false)
-                Volume++;
+            Console.WriteLine(player.Songs[0].Artist.Name);
+            Console.WriteLine(player.Songs[0].Duration);
+            Console.WriteLine(player.Songs.Length);
+            Console.WriteLine(player.Volume);
         }
 
-        public void VolumeDown()
+        public static Song CreateSong()
         {
-            if (_locked==false)
-                Volume--;
+            return new Song { name = "Uknown", Duration = 120 };
         }
 
-        public void VolumeChange(int step)
+
+        public static Song CreateNamedSong(string name)
         {
-            if (_locked==false)
-            Volume += step;
-           
+            return CreateSong(name, 120);
         }
 
-        public void Play()
+        public static Song CreateSong(string name, int duration)
         {
-            if (_locked) return;
-            _playing = true;
-            for (int i = 0; i < length; i++)
-            {
-                Console.WriteLine("Player playing: {Songs[i].Name}");
-                System.Threading.Thread.Sleep(1000);
-            }
-            
+            return new Song { name = name, Duration = duration };
         }
-
-        public void Stop()
-        {
-            if (_locked) return;
-            _playing = false;
-            Console.WriteLine("Player is Stopped");
-        }
-
-        public void Lock()
-        {
-            _locked = true;
-        }
-       
-        public void Unlock()
-        {
-            
-            _locked = false;
-        }
-
-        public void Add(Song[] songs)
-        {
-            songs = songsArray;
-        }
-
-
-        
     }
 }

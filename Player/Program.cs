@@ -9,15 +9,10 @@ namespace Player
     {
         static void Main(string[] args)
         {
-            var player = new Player();
-            // player.Volume = 20;
+            var player = new Player(new ColorSkin(ConsoleColor.Red));
+            player.Volume = 20;
 
             int totalDuration = 0;
-            
-            player.Songs = GetSongsData(ref totalDuration,out int minDuration, out int maxDuration );
-            Console.WriteLine($"Total: {totalDuration}, Min: {minDuration}, MAX {maxDuration}");
-
-            //TraceInfo(player)
 
             player.Play();
             player.VolumeUp();
@@ -26,7 +21,7 @@ namespace Player
 
             player.VolumeChange(-20);
             Console.WriteLine(player.Volume);
-            Console.WriteLine(new string('-',20));
+            Console.WriteLine(new string('-', 20));
 
             player.VolumeChange(400);
             Console.WriteLine(player.Volume);
@@ -36,93 +31,145 @@ namespace Player
             player.Stop();
 
 
-            var song1= CreateSong();
+            var songs = GenerateSongs();
 
-            player.Songs = new Songs[] { song1 };
-
-            //var song2 = CreateNamedSongs("AcDc", 100);
-
-            var song3 = CreateSong("Acdc", 200);
-
-            player.Songs = new Songs[] { song1, song3 };
+            GenerateLikes(songs);
+            songs = songs.SortByGenre(Genre.Rock);
+            player.Songs = songs;
             player.Play();
+
+            ListSongs(player.Songs);
+
+            //var shuffledSongs = songs.Shuffle(3);
+
+            //Console.WriteLine("SHUFFLE");
+            //ListSongs(shuffledSongs);
+
+
+
+
+            player.Stop();
+
+
+
+
+            //var a = new Song[] { song1, song3 };
             Console.ReadLine();
         }
 
-        public static Songs[] GetSongsData(ref int totalDuration, out int minDuration, out int maxDuration)
+        //public static Tuple<string, TimeSpan, bool> GetSongData(Song songs)
+        //{
+        //    return new Tuple<string, TimeSpan, bool>(songs.name, songs.duration, false);
+        //}
+
+        public static void ListSongs(List<Song> songs)
         {
-            minDuration = 1000;
-            maxDuration = 0;
-
-            var artist = new Artist();
-            artist.Genre = "rock";
-            artist.Name = "Bi2";
-            Console.WriteLine(artist.Genre);
-            Console.WriteLine(artist.Name);
-
-            var artist2 = new Artist("metall");
-            Console.WriteLine(artist2.Genre);
-            Console.WriteLine(artist2.Name);
-
-            var artist3 = new Artist("AcDc", "rock-n-roll");
-            Console.WriteLine(artist3.Name);
-            Console.WriteLine(artist3.Genre);
-
-            var album = new Album();
-            album.name = "Rock";
-            album.year = 2000;
-
-            var songs = new Songs[10];
-            var random = new Random();
-            
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < songs.Count; i++)
             {
-                var Songs = new Songs()
+                Console.WriteLine("The song is starting play");
+
+                for (var j = 0; j < songs.Count; j++)
                 {
+                    dynamic songData = GetSongData(songs[j], i == j);
 
-                    duration = random.Next(1000),
-                    name = $"Lajki{i}",
-                    Album = album,
-                    Artist = artist
-                };
-                songs[i] = Songs;
-
-                totalDuration += Songs.duration;
-
-                if (Songs.duration<minDuration)
-                {
-                    minDuration = Songs.duration;
+                    TraceInfo(songData.title, songData.minutes, songData.seconds, songData.albumYear, songData.likeValue,
+                        songData.genre, songData.isSongNext);
                 }
-                maxDuration = Math.Max(maxDuration, Songs.duration);
+
+                Console.WriteLine("The song is finishing play");
+            }
+        }
+
+        public static object GetSongData(Song song, bool isSongNext)
+        {
+            song.Deconstruct(out LikeEnum likeValue, out TimeSpan duration, out string title, out string artistName,
+                out Genre genre, out byte[] thumbnale, out string albumName, out int albumYear);
+
+            return new
+            {
+                title,
+                minutes = duration.Minutes,
+                seconds = duration.Seconds,
+                albumYear,
+                likeValue,
+                genre,
+                isSongNext
+            };
+        }
+
+        public static List<Song> FilterByGenre(List<Song> songs, Genre genre)
+        {
+            return songs.OrderBy(s => s.Artist.Genre).ToList();
+        }
+
+        public static void TraceInfo(string title, int minutes, int seconds, int albumYear, LikeEnum likeValue, Genre genre,
+            bool isSongNext)
+        {
+            switch (likeValue)
+            {
+                case LikeEnum.NoneLike:
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    break;
+                case LikeEnum.Like:
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    break;
+                case LikeEnum.Dislike:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    break;
+            }
+
+            Console.WriteLine($"Title {title}");
+            Console.WriteLine($"Minutes {minutes}");
+            Console.WriteLine($"Seconds {seconds}");
+            Console.WriteLine($"AlbumYear {albumYear}");
+            Console.WriteLine($"Genre {genre}");
+            Console.WriteLine($"IsNextSong {isSongNext}");
+            Console.WriteLine();
+        }
+
+        public static List<Song> GenerateSongs()
+        {
+            var songs = new List<Song>();
+            var random = new Random();
+            var songsCount = random.Next(5, 10);
+
+            for (var i = 0; i < songsCount; i++)
+            {
+                var modulo = i % 3;
+                var genre = Genre.Classic;
+
+                if (modulo == 0)
+                {
+                    genre = Genre.HipHop;
+                }
+                else if (modulo == 1)
+                {
+                    genre = Genre.Rock;
+                }
+
+                var song = new Song(new TimeSpan(random.Next(24), random.Next(60), random.Next(60)), $"Title{i.ToString()}", new Artist($"Artist {i.ToString()}", genre), new Album());
+
+                songs.Add(song);
             }
 
             return songs;
         }
 
-        public static void TraceInfo(Player player)
+        public static void GenerateLikes(List<Song> songs)
         {
-            Console.WriteLine(player.Songs[0].Artist.Name);
-            Console.WriteLine(player.Songs[0].duration);
-            Console.WriteLine(player.Songs.Length);
-            Console.WriteLine(player.Volume);
+            for (var i = 0; i < songs.Count(); i++)
+            {
+                var modulo = i % 3;
+
+                if (modulo == 0)
+                {
+                    songs[i].Like();
+                }
+                else if (modulo == 1)
+                {
+                    songs[i].Dislike();
+                }
+            }
         }
-
-        public static Songs CreateSong()
-        {
-            return new Songs { name = "Uknown", duration=120};
-        }
-
-
-        //public static Songs CreateSong(Name=name, duration=100)
-        //{
-        //  return CreateSong(name, 120);
-        //}
-
-        public static Songs CreateSong(string name, int duration)
-        {
-            return new Songs { name = name, duration = duration };
-        }
-
-
     }
 }
